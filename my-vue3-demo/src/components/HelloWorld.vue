@@ -1,19 +1,17 @@
 <template>
-<div>
-  hello
-</div>
+  <div>
+    {{name}}
+    {{age}}
+  </div>
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    name:"test";
-   
-  }
-}
+import defineComponent from "vue";
+export default defineComponent({
+  name: "HelloWorld",
+  props: ["name", "age"],
+});
 </script>
 
 <style scoped>
-
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <HelloWorld/>
+  <HelloWorld name="test" age="18"/>
 </template>
 
 <script>
