@@ -1,18 +1,16 @@
 <template>
-  <HelloWorld name="test" age="18"/>
+ <div id="hello-vue" class="demo">
+  {{ message }}
+</div>
 </template>
-
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+const HelloVueApp = {
+  data() {
+    return {
+      message: 'Hello Vue!!'
+    }
   }
 }
+​
+Vue.createApp(HelloVueApp).mount('#hello-vue')
 </script>
-
-<style>
-
-</style>
