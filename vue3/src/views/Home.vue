@@ -1,18 +1,36 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <About
+      :name="sendData.val"
+      @name-changed=changeName
+    >
+      世界变化不停，人潮川流不息
+    </About>
   </div>
 </template>
-
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import { reactive } from 'vue'
+import About from './About'
 export default {
-  name: 'Home',
   components: {
-    HelloWorld
+    About
+  },
+  setup () {
+    const sendData = reactive({
+      val: 'sendData'
+    })
+
+    setTimeout(() => {
+      sendData.val += 1
+    }, 1000)
+
+    function changeName () {
+      console.log('事件传送出来了')
+    }
+    return {
+      sendData,
+      changeName
+    }
   }
 }
 </script>

@@ -1,14 +1,18 @@
 <template>
   <div class="app">
-    <div>{{money}}</div>
-    <button @click="money++">修改</button>
+    <!-- setup()函数 中第二个参数 context -->
+    <Home></Home>
   </div>
 </template>
 
 <script>
+import Home from './views/Home'
 import { ref } from 'vue'
 // reactive 函数接受一个普通对象，返回该普通对象的响应式对象
 export default {
+  components: {
+    Home
+  },
   setup () {
     // ref 函数接受一个简单类型,返回一个响应式的对象
     // 响应式对象只有一个属性value
@@ -27,7 +31,7 @@ export default {
 </script>
 
 <style  scoped>
-.app{
+.app {
   background-color: rebeccapurple;
 }
 </style>
