@@ -17,6 +17,7 @@
     <Functional level="3">这是一个动态h元素</Functional>
     <!-- 异步组件 -->
     <AsyncComp></AsyncComp>
+    <Transitiontest></Transitiontest>
   </div>
 </template>
 
@@ -27,7 +28,8 @@ import HelloWorld from './components/HelloWorld.vue'
 import Emit from './components/Emit.vue'
 import VmodelTest from './components/VmodelTest.vue'
 import Functional from './components/Functional.vue'
-
+import Transition from './components/Transition.vue'
+import Transitiontest from './components/Transitiontest.vue'
 export default {
   name: 'App',
   data () {
@@ -59,7 +61,8 @@ export default {
         }
       }
     },
-    AsyncComp: defineAsyncComponent(() => import('./components/NextPage.vue'))
+    AsyncComp: defineAsyncComponent(() => import('./components/NextPage.vue')),
+    Transitiontest
   },
   methods: {
     onClick () {
