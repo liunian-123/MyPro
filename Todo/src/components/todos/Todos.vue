@@ -6,47 +6,32 @@
       autocomplete 属性规定输入字段是否应该启用自动完成功能。
       自动完成允许浏览器预测对字段的输入。当用户在字段开始键入时，浏览器基于之前键入过的值，应该显示出在字段中填写的选项。
     -->
-    <input
+    <EditTodo
+      v-model:todo-title="newTodo"
+      @keyup.enter="addTodo"
+      autofocus
+      placeholder="新增今日待办"
+      autocomplete="off"
+    ></EditTodo>
+    <!-- <input
       type="text"
       v-model="newTodo"
       @keyup.enter="addTodo"
       autofocus
       placeholder="新增今日待办"
       autocomplete="off"
-    />
+    /> -->
 
     <!-- todo 列表 -->
     <ul>
-      <li
+      <Item
         v-for="todo in filterdTodos"
         :key="todo.id"
-        :class="{completed:todo.completed, editing: todo === editedTodo}"
+        :todo="todo"
+        v-model:edited-todo="editedTodo"
+        @remove-todo="removeTodo"
       >
-
-        <!-- 绑定完成状态 -->
-        <div class="view">
-          <input
-            type="checkbox"
-            v-model="todo.completed"
-          >
-          <!-- @dbclick 监听双击事件 -->
-          <label @dblclick="editTodo(todo)">{{todo.title}}</label>
-          <button @click="removeTodo(todo)">x</button>
-        </div>
-
-        <!-- 编辑待办 -->
-        <!-- @blur 当元素失去焦点时所触发的事件 -->
-        <!--  v-todo-focus 时自定义指令 通过directives 进行声明-->
-        <input
-          type="text"
-          class="edit"
-          v-model="todo.title"
-          v-todo-focus="todo === editedTodo"
-          @blur="doneEdit(todo)"
-          @keyup.enter="doneEdit(todo)"
-          @keyup.escape="cancelEdit(todo)"
-        >
-      </li>
+      </Item>
     </ul>
 
     <!-- 过滤 已完成 未完成 -->
@@ -69,6 +54,7 @@
 
 <script>
 import { reactive, toRefs, computed, watchEffect } from 'vue'
+// import Item from './Item.vue'
 const filters = {
   all (todos) { return todos },
   active (todos) { return todos.filter(todo => !todo.completed) },
@@ -78,23 +64,25 @@ const filters = {
 // 缓存操作
 const todoStorage = {
   fetch () {
-    let todos = JSON.parse(localStorage.getItem('vue3-todos')||'[]')
-    todos.forEach((todo,index) => {
+    let todos = JSON.parse(localStorage.getItem('vue3-todos') || '[]')
+    todos.forEach((todo, index) => {
       todo.id = index + 1
     });
     return todos
   },
-  save(todos){
-    localStorage.setItem("vue3-todos",JSON.stringify(todos))
+  save (todos) {
+    localStorage.setItem("vue3-todos", JSON.stringify(todos))
   }
 }
 
 export default {
+  // component:{
+  //   Item
+  // },
   setup () {
     const state = reactive({
       newTodo: '',
       todos: todoStorage.fetch(),
-      beforeEditCache: '',
       editedTodo: null, //正在编辑的todo
       visibility: 'all',
       filterdTodos: computed(() => {
@@ -112,54 +100,22 @@ export default {
     function removeTodo (todo) {
       state.todos.splice(state.todos.indexOf(todo), 1)
     }
-    function editTodo (todo) {
-      state.beforeEditCache = todo.title
-      state.editedTodo = todo
-    }
-    function cancelEdit (todo) {
-      state.title = todo.beforeEditCache
-      state.editedTodo = null
-    }
-    function doneEdit (todo) {
-      state.editedTodo = null
-    }
-
     watchEffect(() => {
       todoStorage.save(state.todos)
-      
+
     })
     return {
       ...toRefs(state),
       addTodo,
-      removeTodo,
-      editTodo,
-      cancelEdit,
-      doneEdit
+      removeTodo
     }
   },
-  directives: {
-    "todo-focus": (el, { value }) => {
-      if (value) {
-        el.focus();
-      }
-    }
-  }
+
 }
 </script>
 
 <style  scoped>
-.completed label {
-  /* 删除线 */
-  text-decoration: line-through;
-}
-.edit,
-.editing .view {
-  display: none;
-}
-.view,
-.editing .edit {
-  display: block;
-}
+
 .filters > span {
   padding: 2px 4px;
   margin-right: 4px;
