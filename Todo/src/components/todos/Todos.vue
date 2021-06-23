@@ -35,25 +35,16 @@
     </ul>
 
     <!-- 过滤 已完成 未完成 -->
-    <p class="filters">
-      <span
-        @click="visibility = 'all'"
-        :class="{selected: visibility === 'all'}"
-      >ALL</span>
-      <span
-        @click="visibility = 'active'"
-        :class="{selected: visibility === 'active'}"
-      >Active</span>
-      <span
-        @click="visibility = 'completed'"
-        :class="{selected: visibility === 'completed'}"
-      >Completed</span>
-    </p>
+    <Filter
+      :items="filterItems"
+      v-model="visibility"
+    ></Filter>
   </div>
 </template>
 
 <script>
 import { reactive, toRefs, computed, watchEffect } from 'vue'
+import Filter from './Filter.vue'
 // import Item from './Item.vue'
 const filters = {
   all (todos) { return todos },
@@ -62,28 +53,20 @@ const filters = {
 }
 
 // 缓存操作
-const todoStorage = {
-  fetch () {
-    let todos = JSON.parse(localStorage.getItem('vue3-todos') || '[]')
-    todos.forEach((todo, index) => {
-      todo.id = index + 1
-    });
-    return todos
-  },
-  save (todos) {
-    localStorage.setItem("vue3-todos", JSON.stringify(todos))
-  }
-}
+
 
 export default {
-  // component:{
-  //   Item
-  // },
+  components: { Filter },
   setup () {
     const state = reactive({
       newTodo: '',
       todos: todoStorage.fetch(),
       editedTodo: null, //正在编辑的todo
+      filterItems: [
+        { label: 'ALL', value: 'all' },
+        { label: 'Active', value: 'active' },
+        { label: 'Completed', value: 'completed' }
+      ],
       visibility: 'all',
       filterdTodos: computed(() => {
         return filters[state.visibility](state.todos)
@@ -115,13 +98,4 @@ export default {
 </script>
 
 <style  scoped>
-
-.filters > span {
-  padding: 2px 4px;
-  margin-right: 4px;
-  border: 1px solid transparent;
-}
-.filters > span.selected {
-  background-color: rgba(173, 47, 47, 0.2);
-}
 </style>
